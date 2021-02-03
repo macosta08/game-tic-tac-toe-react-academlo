@@ -1,5 +1,5 @@
 import React from "react";
-
+import "./message.css";
 export const MessageTurnWinner = ({ winner, board, xIsNext }) => {
   const calculateTie = (winner, board) => {
     const endGame = !board.includes(null);

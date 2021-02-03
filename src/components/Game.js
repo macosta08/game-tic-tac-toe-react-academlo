@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Board from "./Board";
+
 import { MessageTurnWinner } from "./MessageTurnWinner";
 
 //import { Button } from "./Button";
@@ -30,8 +31,9 @@ function calculateWinner(board) {
 const Game = () => {
   const [board, setBoard] = useState(new Array(9).fill(null)); // null, "X", "O"
   const [xIsNext, setXIsNext] = useState(true);
+  const [historyMove, setHistoryMove] = useState([]);
   const winner = calculateWinner(board);
-  console.log(board);
+
   const handleSquareChange = (index) => {
     const copiedBoard = [...board];
     if (copiedBoard[index] || winner) {
@@ -40,16 +42,32 @@ const Game = () => {
     copiedBoard[index] = xIsNext ? "X" : "O";
     setXIsNext(!xIsNext);
     setBoard(copiedBoard);
+    setHistoryMove([...historyMove, copiedBoard]);
   };
 
   const resetGame = () => {
     setBoard(new Array(9).fill(null));
+    setHistoryMove([]);
   };
   return (
     <div>
+      <div className="buttons-move">
+        {historyMove.map((move, index) => (
+          <button
+            className="button-move"
+            key={move}
+            onClick={() => setBoard(move)}
+          >
+            Move: {index + 1}
+          </button>
+        ))}
+      </div>
       <Board squares={board} handleClick={handleSquareChange} />
       <MessageTurnWinner winner={winner} board={board} xIsNext={xIsNext} />
-      <button onClick={resetGame}>New Game</button>
+
+      <button className="button-move" onClick={resetGame}>
+        New Game
+      </button>
     </div>
   );
 };
