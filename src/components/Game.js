@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Board from "./Board";
+import { MessageTurnWinner } from "./MessageTurnWinner";
+
 //import { Button } from "./Button";
 
 function calculateWinner(board) {
@@ -23,13 +25,13 @@ function calculateWinner(board) {
 
   return null;
 }
+
 //{copiedBoard[index] || winner ? <p>Winner X</p>)}
 const Game = () => {
   const [board, setBoard] = useState(new Array(9).fill(null)); // null, "X", "O"
   const [xIsNext, setXIsNext] = useState(true);
-
   const winner = calculateWinner(board);
-
+  console.log(board);
   const handleSquareChange = (index) => {
     const copiedBoard = [...board];
     if (copiedBoard[index] || winner) {
@@ -46,11 +48,7 @@ const Game = () => {
   return (
     <div>
       <Board squares={board} handleClick={handleSquareChange} />
-      {(winner && xIsNext && <p>Winner "O"</p>) ||
-        (xIsNext && <p>Next Turn: "X"</p>)}
-      {(winner && !xIsNext && <p>Winner "X"</p>) ||
-        (!xIsNext && <p>Next Turn: "O"</p>)}
-
+      <MessageTurnWinner winner={winner} board={board} xIsNext={xIsNext} />
       <button onClick={resetGame}>New Game</button>
     </div>
   );
