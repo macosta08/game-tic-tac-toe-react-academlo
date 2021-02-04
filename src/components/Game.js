@@ -32,22 +32,35 @@ const Game = () => {
   const [board, setBoard] = useState(new Array(9).fill(null)); // null, "X", "O"
   const [xIsNext, setXIsNext] = useState(true);
   const [historyMove, setHistoryMove] = useState([]);
+  const [startDeleteHistory, setStartDeleteHistory] = useState(0);
   const winner = calculateWinner(board);
 
   const handleSquareChange = (index) => {
     const copiedBoard = [...board];
-    if (copiedBoard[index] || winner) {
-      return;
-    }
+    if (copiedBoard[index] || winner) return;
+
     copiedBoard[index] = xIsNext ? "X" : "O";
     setXIsNext(!xIsNext);
     setBoard(copiedBoard);
+
+    console.log(startDeleteHistory);
+    console.log(historyMove);
+    historyMove.splice(startDeleteHistory);
     setHistoryMove([...historyMove, copiedBoard]);
+    setStartDeleteHistory(historyMove.length + 1);
+  };
+
+  const handleHistoryMove = (move, index) => {
+    setStartDeleteHistory(index + 1);
+    setBoard(move);
+    console.log(index + 1);
+    console.log(historyMove);
   };
 
   const resetGame = () => {
     setBoard(new Array(9).fill(null));
     setHistoryMove([]);
+    setStartDeleteHistory(0);
   };
   return (
     <div>
@@ -56,7 +69,7 @@ const Game = () => {
           <button
             className="button-move"
             key={move}
-            onClick={() => setBoard(move)}
+            onClick={() => handleHistoryMove(move, index)}
           >
             Move: {index + 1}
           </button>
